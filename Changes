@@ -1,0 +1,9 @@
+Revision history for Perl extension FormValidator::Simple.
+
+0.02  Sun Sep  25 22:00:00 2005
+    - cpan release version
+
+0.01  Thu Sep  1 10:38:22 2005
+	- original version; created by h2xs 1.23 with options
+		-X -A FormValidator::Simple
+
