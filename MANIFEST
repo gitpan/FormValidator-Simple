@@ -33,4 +33,3 @@ t/14_regex.t
 t/15_any.t
 t/16_plugin.t
 t/lib/FormValidator/Simple/Plugin/Sample.pm
-TASK

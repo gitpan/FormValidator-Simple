@@ -8,29 +8,29 @@ use FormValidator::Simple::Constants;
 __PACKAGE__->mk_accessors(qw/_records/);
 
 sub new {
-	my $class = shift;
-	my $self  = bless { }, $class;
-	$self->_init(@_);
-	return $self;
+    my $class = shift;
+    my $self  = bless { }, $class;
+    $self->_init(@_);
+    return $self;
 }
 
 sub _init {
-	my $self = shift;
-	$self->_records( { } );
+    my $self = shift;
+    $self->_records( { } );
 }
 
 sub register {
-	my ($self, $name) = @_;
-	$self->_records->{$name}
-		||= FormValidator::Simple::Result->new($name);
+    my ($self, $name) = @_;
+    $self->_records->{$name}
+        ||= FormValidator::Simple::Result->new($name);
 }
 
 sub record {
-	my ($self, $name) = @_;
-	FormValidator::Simple::Exception->throw(
-		qq/result of "$name" isn't set./
-	) unless exists $self->_records->{$name};
-	return $self->_records->{$name};
+    my ($self, $name) = @_;
+    FormValidator::Simple::Exception->throw(
+        qq/result of "$name" isn't set./
+    ) unless exists $self->_records->{$name};
+    return $self->_records->{$name};
 }
 
 sub set_result {
@@ -40,79 +40,79 @@ sub set_result {
 }
 
 sub has_blank {
-	my $self = shift;
-	foreach my $record ( values %{ $self->_records } ) {
-		return TRUE if $record->is_blank;
-	}
-	return FALSE;
+    my $self = shift;
+    foreach my $record ( values %{ $self->_records } ) {
+        return TRUE if $record->is_blank;
+    }
+    return FALSE;
 }
 
 *has_missing = \&has_blank;
 
 sub has_invalid {
-	my $self = shift;
-	foreach my $record ( values %{ $self->_records } ) {
-		return TRUE if $record->is_invalid;
-	}
-	return FALSE;
+    my $self = shift;
+    foreach my $record ( values %{ $self->_records } ) {
+        return TRUE if $record->is_invalid;
+    }
+    return FALSE;
 }
 
 sub valid {
-	my ($self, $name) = @_;
-	if ($name) {
-		return $self->record($name)->is_valid
-			 ? $self->record($name)->data : FALSE;
-	}
+    my ($self, $name) = @_;
+    if ($name) {
+        return $self->record($name)->is_valid
+             ? $self->record($name)->data : FALSE;
+    }
     else {
-		my @valids
+        my @valids
             = sort { $a cmp $b    }
-			  map  { $_->name     }
-			  grep { $_->is_valid }
-			       values %{ $self->_records };
+              map  { $_->name     }
+              grep { $_->is_valid }
+                   values %{ $self->_records };
 
-		return wantarray ? @valids : \@valids;
-	}
+        return wantarray ? @valids : \@valids;
+    }
 }
 
 sub blank {
-	my ($self, $name) = @_;
-	if ($name) {
-		return $self->record($name)->is_blank ? TRUE : FALSE;
-	}
+    my ($self, $name) = @_;
+    if ($name) {
+        return $self->record($name)->is_blank ? TRUE : FALSE;
+    }
     else {
-		my @blanks
+        my @blanks
             = sort { $a cmp $b    }
-			  map  { $_->name     }
-			  grep { $_->is_blank }
-			       values %{ $self->_records };
+              map  { $_->name     }
+              grep { $_->is_blank }
+                   values %{ $self->_records };
 
-		return wantarray ? @blanks : \@blanks;
-	}
+        return wantarray ? @blanks : \@blanks;
+    }
 }
 
 *missing = \&blank;
 
 sub invalid {
-	my ($self, $name, $constraint) = @_;
-	if ($name) {
-		if ($constraint) {
-			$self->record($name)->is_invalid_for($constraint)
-				? TRUE : FALSE;
-		}
+    my ($self, $name, $constraint) = @_;
+    if ($name) {
+        if ($constraint) {
+            $self->record($name)->is_invalid_for($constraint)
+                ? TRUE : FALSE;
+        }
         else {
-			$self->record($name)->is_invalid
-				? TRUE : FALSE;
-		}
-	}
+            $self->record($name)->is_invalid
+                ? TRUE : FALSE;
+        }
+    }
     else {
-		my @invalids
+        my @invalids
             = sort { $a cmp $b      }
-			  map  { $_->name       }
-			  grep { $_->is_invalid }
-			       values %{ $self->_records };
+              map  { $_->name       }
+              grep { $_->is_invalid }
+                   values %{ $self->_records };
 
-		return wantarray ? @invalids : \@invalids;
-	}
+        return wantarray ? @invalids : \@invalids;
+    }
 }
 
 1;

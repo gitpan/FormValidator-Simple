@@ -7,13 +7,13 @@ use FormValidator::Simple::Iterator;
 __PACKAGE__->mk_accessors(qw/needs_blank_check/);
 
 sub _init {
-	my $self = shift;
-	$self->needs_blank_check( FALSE );
+    my $self = shift;
+    $self->needs_blank_check( FALSE );
 }
 
 sub iterator {
-	my $self = shift;
-	return FormValidator::Simple::Constraint::Iterator->new($self);
+    my $self = shift;
+    return FormValidator::Simple::Constraint::Iterator->new($self);
 }
 
 package FormValidator::Simple::Constraint::Iterator;

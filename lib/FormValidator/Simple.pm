@@ -10,50 +10,50 @@ use FormValidator::Simple::Profile;
 use FormValidator::Simple::Validator;
 use FormValidator::Simple::Constants;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 __PACKAGE__->mk_accessors(qw/data prof results/);
 
 sub import {
-	my $class = shift;
-	foreach my $plugin (@_) {
-		my $plugin_class = "FormValidator::Simple::Plugin::".$plugin;
-		$class->load_plugin($plugin_class);
-	}
+    my $class = shift;
+    foreach my $plugin (@_) {
+        my $plugin_class = "FormValidator::Simple::Plugin::".$plugin;
+        $class->load_plugin($plugin_class);
+    }
 }
 
 sub load_plugin {
-	my ($proto, $plugin) = @_;
-	my $class  = ref $proto || $proto;
-	unless (Class::Inspector->installed($plugin)) {
-		FormValidator::Simple::Exception->throw(
-			qq/$plugin isn't installed./
-		);
-	}
-	$plugin->require;
-	if ($@) {
-		FormValidator::Simple::Exception->throw(
-			qq/Couldn't require "$plugin", "$@"./
-		);
-	}
-	{
-		no strict 'refs';
-		push @FormValidator::Simple::Validator::ISA, $plugin;
-	}
+    my ($proto, $plugin) = @_;
+    my $class  = ref $proto || $proto;
+    unless (Class::Inspector->installed($plugin)) {
+        FormValidator::Simple::Exception->throw(
+            qq/$plugin isn't installed./
+        );
+    }
+    $plugin->require;
+    if ($@) {
+        FormValidator::Simple::Exception->throw(
+            qq/Couldn't require "$plugin", "$@"./
+        );
+    }
+    {
+        no strict 'refs';
+        push @FormValidator::Simple::Validator::ISA, $plugin;
+    }
 }
 
 sub new {
-	my $proto = shift;
-	my $class = ref $proto || $proto;
-	my $self  = bless { }, $class;
-	$self->_init(@_);
-	return $self;
+    my $proto = shift;
+    my $class = ref $proto || $proto;
+    my $self  = bless { }, $class;
+    $self->_init(@_);
+    return $self;
 }
 
 sub _init {
-	my ($self, %options) = @_;
-	FormValidator::Simple::Validator->options( \%options );
-	$self->results( FormValidator::Simple::Results->new );
+    my ($self, %options) = @_;
+    FormValidator::Simple::Validator->options( \%options );
+    $self->results( FormValidator::Simple::Results->new );
 }
 
 sub set_invalid {
@@ -72,53 +72,53 @@ sub set_invalid {
 }
 
 sub check {
-	my ($proto, $input, $prof, $options) = @_;
-	$options ||= {};
-	my $self = ref $proto ? $proto : $proto->new(%$options);
+    my ($proto, $input, $prof, $options) = @_;
+    $options ||= {};
+    my $self = ref $proto ? $proto : $proto->new(%$options);
 
-	my $data = FormValidator::Simple::Data->new($input);
-	my $prof_setting = FormValidator::Simple::Profile->new($prof);
+    my $data = FormValidator::Simple::Data->new($input);
+    my $prof_setting = FormValidator::Simple::Profile->new($prof);
 
-	my $profile_iterator = $prof_setting->iterator;
+    my $profile_iterator = $prof_setting->iterator;
 
-	PROFILE:
-	while ( my $profile = $profile_iterator->next ) {
+    PROFILE:
+    while ( my $profile = $profile_iterator->next ) {
 
-		my $name        = $profile->name;
-		my $keys        = $profile->keys;
-		my $constraints = $profile->constraints;
+        my $name        = $profile->name;
+        my $keys        = $profile->keys;
+        my $constraints = $profile->constraints;
 
         KEYCHECK:
         foreach my $key (@$keys) {
             next PROFILE unless $data->has_key($key);
         }
-		my $params = $data->param($keys);
+        my $params = $data->param($keys);
 
-		$self->results->register($name);
+        $self->results->register($name);
 
         $self->results->record($name)->data( @$params == 1 ? $params->[0] : '');
 
-		my $constraint_iterator = $constraints->iterator;
+        my $constraint_iterator = $constraints->iterator;
         if ( scalar @$params == 1 ) {
-		    unless ( defined $params->[0] && $params->[0] ne '' ) {
-    			if ( $constraints->needs_blank_check ) {
-	    			$self->results->record($name)->is_blank( TRUE );
-	    		}
-		    	next PROFILE;
-	    	}
+            unless ( defined $params->[0] && $params->[0] ne '' ) {
+                if ( $constraints->needs_blank_check ) {
+                    $self->results->record($name)->is_blank( TRUE );
+                }
+                next PROFILE;
+            }
         }
 
-		CONSTRAINT:
-		while ( my $constraint = $constraint_iterator->next ) {
+        CONSTRAINT:
+        while ( my $constraint = $constraint_iterator->next ) {
 
-			my ($result, $data) = $constraint->check($params);
+            my ($result, $data) = $constraint->check($params);
 
-			$self->results->set_result($name, $constraint->name, $result);
+            $self->results->set_result($name, $constraint->name, $result);
 
-			$self->results->record->data($data) if $data;
-		}
+            $self->results->record->data($data) if $data;
+        }
 
-	}
+    }
     return $self->results;
 }
 
@@ -186,7 +186,7 @@ You can write constraints on single line for each input data.
 
 This idea is based on Sledge::Plugin::Validator, and most of validation code is borrowed from this plugin.
 
-(Sledge is a MVC web application framework: http://sl.edge/jp [Japanese] )
+(Sledge is a MVC web application framework: http://sl.edge.jp [Japanese] )
 
 The result object this module returns behaves like L<Data::FormValidator::Results>.
 
@@ -423,7 +423,7 @@ to make it easier to find wrong setting.
 
 L<Data::FormValidator>
 
-http://sl.edge/jp/ (Japanese)
+http://sl.edge.jp/ (Japanese)
 
 http://sourceforge.jp/projects/sledge
 

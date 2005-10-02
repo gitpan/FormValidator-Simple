@@ -11,25 +11,25 @@ use Date::Calc;
 __PACKAGE__->mk_classdata( options => { } );
 
 sub SP {
-	my ($self, $params, $args) = @_;
+    my ($self, $params, $args) = @_;
     my $data = $params->[0];
     return $data =~ /\s/ ? TRUE : FALSE;
 }
 
 sub INT {
-	my ($self, $params, $args) = @_;
+    my ($self, $params, $args) = @_;
     my $data = $params->[0];
     return $data =~ /^\-?[\d]+$/ ? TRUE : FALSE;
 }
 
 sub ASCII {
-	my ($self, $params, $args) = @_;
+    my ($self, $params, $args) = @_;
     my $data = $params->[0];
     return $data =~ /^[\x21-\x7E]+$/ ? TRUE : FALSE;
 }
 
 sub DUPLICATION {
-	my ($self, $params, $args) = @_;
+    my ($self, $params, $args) = @_;
     my $data1 = $params->[0];
     my $data2 = $params->[1];
     unless (defined $data1 && defined $data2) {
@@ -41,7 +41,7 @@ sub DUPLICATION {
 }
 
 sub LENGTH {
-	my ($self, $params, $args) = @_;
+    my ($self, $params, $args) = @_;
     unless ( scalar(@$args) > 0 ) {
         FormValidator::Simple::Exception->throw(
         qq/validation "LENGTH" needs one or two arguments./
@@ -57,7 +57,7 @@ sub LENGTH {
 }
 
 sub REGEX {
-	my ($self, $params, $args) = @_;
+    my ($self, $params, $args) = @_;
     my $data  = $params->[0];
     my $regex = $args->[0];
     return $data =~ /$regex/ ? TRUE : FALSE;
