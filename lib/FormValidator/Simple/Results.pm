@@ -27,9 +27,8 @@ sub register {
 
 sub record {
     my ($self, $name) = @_;
-    FormValidator::Simple::Exception->throw(
-        qq/result of "$name" isn't set./
-    ) unless exists $self->_records->{$name};
+    $self->register($name)
+    unless exists $self->_records->{$name};
     return $self->_records->{$name};
 }
 
@@ -64,13 +63,12 @@ sub valid {
              ? $self->record($name)->data : FALSE;
     }
     else {
-        my @valids
-            = sort { $a cmp $b    }
-              map  { $_->name     }
+        my %valids
+            = map  { ( $_->name, $_->data ) }
               grep { $_->is_valid }
                    values %{ $self->_records };
 
-        return wantarray ? @valids : \@valids;
+        return \%valids;
     }
 }
 

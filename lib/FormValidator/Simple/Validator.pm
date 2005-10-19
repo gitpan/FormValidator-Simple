@@ -127,6 +127,14 @@ sub ANY {
     return FALSE;
 }
 
+sub SELECTED_AT_LEAST {
+    my ($self, $params, $args) = @_;
+    my $data     = $params->[0];
+    my $selected = ref $data ? $data : [$data];
+    my $num      = $args->[0] + 0;
+    return scalar(@$selected) >= $num ? TRUE : FALSE;
+}
+
 1;
 __END__
 

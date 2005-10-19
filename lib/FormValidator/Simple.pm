@@ -10,7 +10,7 @@ use FormValidator::Simple::Profile;
 use FormValidator::Simple::Validator;
 use FormValidator::Simple::Constants;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 __PACKAGE__->mk_accessors(qw/data prof results/);
 
@@ -88,10 +88,10 @@ sub check {
         my $keys        = $profile->keys;
         my $constraints = $profile->constraints;
 
-        KEYCHECK:
-        foreach my $key (@$keys) {
-            next PROFILE unless $data->has_key($key);
-        }
+        #KEYCHECK:
+        #foreach my $key (@$keys) {
+        #    next PROFILE unless $data->has_key($key);
+        #}
         my $params = $data->param($keys);
 
         $self->results->register($name);
@@ -322,6 +322,18 @@ check if the length of the data is 4 or not.
 
 when you set two arguments, it checks if the length of data is in
 the range between 4 and 10.
+
+=item SELECTED_AT_LEAST
+
+verify the selected parameters is counted over allowed minimum.
+
+    <input type="checkbox" name="hobby" value="music" /> Music
+    <input type="checkbox" name="hobby" value="movie" /> Movie
+    <input type="checkbox" name="hobby" value="game"  /> Game
+
+    my $result = FormValidator::Simple->check( $q => [ 
+        hobby => ['NOT_BLANK', ['SELECTED_AT_LEAST', 2] ],
+    ] );
 
 =item REGEX
 

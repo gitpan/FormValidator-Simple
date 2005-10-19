@@ -1,5 +1,9 @@
 Revision history for Perl extension FormValidator::Simple.
 
+0.04  Wed Oct 19 20:00:00 2005
+    - added validation SELECTED_AT_LEAST
+      fixed some code didn't work as expected.
+
 0.03  Sun Oct  1 22:00:00 2005
     - little bit fixed documentation and Makefile.PL
 

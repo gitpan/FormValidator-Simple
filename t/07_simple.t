@@ -37,11 +37,11 @@ ok(!$results->missing('email'));
 
 my @missings = $results->missing;
 my @invalids = $results->invalid;
-my @valids   = $results->valid;
+my $valids   = $results->valid;
 
 is(scalar(@missings), 1);
 is(scalar(@invalids), 0);
-is(scalar(@valids),   4);
+is(scalar(keys %$valids),   4);
 
 my $valid = FormValidator::Simple->new;
 

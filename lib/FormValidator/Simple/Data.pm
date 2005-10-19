@@ -39,7 +39,12 @@ sub has_key {
 
 sub param {
     my ($self, $keys) = @_;
-    my @values = map { $self->{_records}{$_} } @$keys;
+    my @values = map {
+        exists $self->{_records}{$_}
+             ? $self->{_records}{$_}
+             : ''
+             ;
+    } @$keys;
     return wantarray ? @values : \@values;
 }
 

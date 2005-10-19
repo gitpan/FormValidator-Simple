@@ -17,7 +17,7 @@ sub _init {
     my ($self, $name) = @_; 
     $self->name($name);
     $self->constraints( { } );
-    $self->data( undef );
+    $self->data( '' );
     $self->is_blank( FALSE );
 }
 
