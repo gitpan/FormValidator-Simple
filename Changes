@@ -1,5 +1,8 @@
 Revision history for Perl extension FormValidator::Simple.
 
+0.05  Thu Oct 20 01:00:00 2005
+    - added validation HTTP_URL
+
 0.04  Wed Oct 19 20:00:00 2005
     - added validation SELECTED_AT_LEAST
       fixed some code didn't work as expected.

@@ -127,6 +127,12 @@ sub ANY {
     return FALSE;
 }
 
+sub HTTP_URL {
+    my ($self, $params, $args) = @_;
+    my $data = $params->[0];
+    return $data =~ /^s?https?:\/\/[-_.!~*'()a-zA-Z0-9;\/?:\@&=+\$,%#]+$/ ? TRUE : FALSE;
+}
+
 sub SELECTED_AT_LEAST {
     my ($self, $params, $args) = @_;
     my $data     = $params->[0];

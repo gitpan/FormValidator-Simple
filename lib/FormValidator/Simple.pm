@@ -10,7 +10,7 @@ use FormValidator::Simple::Profile;
 use FormValidator::Simple::Validator;
 use FormValidator::Simple::Constants;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 __PACKAGE__->mk_accessors(qw/data prof results/);
 
@@ -323,9 +323,17 @@ check if the length of the data is 4 or not.
 when you set two arguments, it checks if the length of data is in
 the range between 4 and 10.
 
+=item HTTP_URL
+
+verify it is a http(s)-url
+
+    my $result = FormValidator::Simple->check( $q => [
+        param1 => [ 'HTTP_URL' ],
+    ] );
+
 =item SELECTED_AT_LEAST
 
-verify the selected parameters is counted over allowed minimum.
+verify the quantity of selected parameters is counted over allowed minimum.
 
     <input type="checkbox" name="hobby" value="music" /> Music
     <input type="checkbox" name="hobby" value="movie" /> Movie
