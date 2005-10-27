@@ -10,7 +10,7 @@ use FormValidator::Simple::Profile;
 use FormValidator::Simple::Validator;
 use FormValidator::Simple::Constants;
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 __PACKAGE__->mk_accessors(qw/data prof results/);
 
@@ -115,7 +115,7 @@ sub check {
 
             $self->results->set_result($name, $constraint->name, $result);
 
-            $self->results->record->data($data) if $data;
+            $self->results->record($name)->data($data) if $data;
         }
 
     }
@@ -399,6 +399,37 @@ check with L<Date::Calc>
         { datetime => [qw/year month day hour min sec/] } => ['DATETIME']
     ] );
 
+=item GREATER_THAN
+
+numeric comparison
+
+    my $result = FormValidator::Simple->check( $q => [
+        age => [ ['GREATER_THAN', 25] ],
+    ] );
+
+=item LESS_THAN
+
+numeric comparison
+
+    my $result = FormValidator::Simple->check( $q => [
+        age => [ ['LESS_THAN', 25] ],
+    ] );
+
+=item EQUAL_TO
+
+numeric comparison
+
+    my $result = FormValidator::Simple->check( $q => [
+        age => [ ['EQUAL_TO', 25] ],
+    ] );
+
+=item BETWEEN
+
+numeric comparison
+
+    my $result = FormValidator::Simple->check( $q => [
+        age => [ ['BETWEEN', 20, 25] ],
+    ] );
 
 =item ANY
 

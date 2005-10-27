@@ -59,6 +59,7 @@ sub has_invalid {
 sub valid {
     my ($self, $name) = @_;
     if ($name) {
+        return unless exists $self->_records->{$name};
         return $self->record($name)->is_valid
              ? $self->record($name)->data : FALSE;
     }
@@ -98,8 +99,15 @@ sub invalid {
                 ? TRUE : FALSE;
         }
         else {
-            $self->record($name)->is_invalid
-                ? TRUE : FALSE;
+            if ($self->record($name)->is_invalid) {
+                my $constraints = $self->record($name)->constraints;
+                my @invalids =  sort { $a cmp $b } grep { !$constraints->{$_} }
+                                keys %$constraints;
+                return wantarray ? @invalids : \@invalids;
+            }
+            else {
+                return FALSE;
+            }
         }
     }
     else {

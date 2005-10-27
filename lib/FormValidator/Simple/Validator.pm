@@ -141,6 +141,54 @@ sub SELECTED_AT_LEAST {
     return scalar(@$selected) >= $num ? TRUE : FALSE;
 }
 
+sub GREATER_THAN {
+    my ($self, $params, $args) = @_;
+    my $data = $params->[0];
+    my $target = $args->[0];
+    unless ( $target && $target =~ /^\d+$/ ) {
+        FormValidator::Simple::Exception->throw(
+        qq/Validation GREATER_THAN needs a numeric argument./
+        );
+    }
+    return ( $data > $target ) ? TRUE : FALSE;
+}
+
+sub LESS_THAN {
+    my ($self, $params, $args) = @_;
+    my $data = $params->[0];
+    my $target = $args->[0];
+    unless ( $target && $target =~ /^\d+$/ ) {
+        FormValidator::Simple::Exception->throw(
+        qq/Validation LESS_THAN needs a numeric argument./
+        );
+    }
+    return ( $data < $target ) ? TRUE : FALSE;
+}
+
+sub EQUAL_TO {
+    my ($self, $params, $args) = @_;
+    my $data = $params->[0];
+    my $target = $args->[0];
+    unless ( $target && $target =~ /^\d+$/ ) {
+        FormValidator::Simple::Exception->throw(
+        qq/Validation EQUAL_TO needs a numeric argument./
+        );
+    }
+    return ( $data == $target ) ? TRUE : FALSE;
+}
+
+sub BETWEEN {
+    my ($self, $params, $args) = @_;
+    my $data = $params->[0];
+    my $start = $args->[0];
+    my $end   = $args->[1];
+    unless ( $start && $start =~ /^\d+$/ && $end && $end =~ /^\d+$/ ) {
+        FormValidator::Simple::Exception->throw(
+        qq/Validation BETWEEN need two numeric arguments./
+        );
+    }
+    return ( $data >= $start && $data <= $end ) ? TRUE : FALSE;
+}
 1;
 __END__
 
