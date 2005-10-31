@@ -1,8 +1,12 @@
 Revision history for Perl extension FormValidator::Simple.
 
+0.07  Mon Oct 31 21:00:00 2005
+    - added validation DECIMAL
+
 0.06  Thu Oct 27 21:00:00 2005
     - added validations: numeric comparisons
       GREATER_THAN LESS_THAN EQUAL_TO BETWEEN
+      ( suggested by Jody Alkema )
 
 0.05  Thu Oct 20 01:00:00 2005
     - added validation HTTP_URL

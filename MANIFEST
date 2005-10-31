@@ -36,4 +36,5 @@ t/17_pod.t
 t/18_invalids.t
 t/19_url.t
 t/20_numeric_cmp.t
+t/21_decimal.t
 t/lib/FormValidator/Simple/Plugin/Sample.pm

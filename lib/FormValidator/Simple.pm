@@ -10,7 +10,7 @@ use FormValidator::Simple::Profile;
 use FormValidator::Simple::Validator;
 use FormValidator::Simple::Constants;
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 __PACKAGE__->mk_accessors(qw/data prof results/);
 
@@ -301,6 +301,16 @@ check if the data has space or not.
 =item INT
 
 check if the data is integer or not.
+
+=item DECIMAL
+
+    $q->param( 'num1' => '123.45678' );
+
+    my $result = FormValidator::Simple->check( $q => [ 
+        num1 => [ ['DECIMAL', 3, 5] ],
+    ] );
+
+each numbers (3,5) mean maximum digits before/after '.'
 
 =item ASCII
 

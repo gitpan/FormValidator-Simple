@@ -12,10 +12,10 @@ $q->param( age3 => 25 );
 $q->param( age4 => 25 );
 
 my $r = FormValidator::Simple->check( $q => [
-    age1 => [ [qw/GREATER_THAN 20/] ],
-    age2 => [ [qw/LESS_THAN 30/] ],
-    age3 => [ [qw/EQUAL_TO 25/] ],
-    age4 => [ [qw/BETWEEN 20 30/] ],
+    age1 => [ 'INT', [qw/GREATER_THAN 20/] ],
+    age2 => [ 'INT', [qw/LESS_THAN 30/] ],
+    age3 => [ 'INT', [qw/EQUAL_TO 25/] ],
+    age4 => [ 'INT', [qw/BETWEEN 20 30/] ],
 ] );
 
 ok(!$r->invalid('age1'));
@@ -24,10 +24,10 @@ ok(!$r->invalid('age3'));
 ok(!$r->invalid('age4'));
 
 my $r2 = FormValidator::Simple->check( $q => [
-    age1 => [ [qw/GREATER_THAN 30/] ],
-    age2 => [ [qw/LESS_THAN 20/] ],
-    age3 => [ [qw/EQUAL_TO 22/] ],
-    age4 => [ [qw/BETWEEN 20 22/] ],
+    age1 => [ 'INT', [qw/GREATER_THAN 30/] ],
+    age2 => [ 'INT', [qw/LESS_THAN 20/] ],
+    age3 => [ 'INT', [qw/EQUAL_TO 22/] ],
+    age4 => [ 'INT', [qw/BETWEEN 20 22/] ],
 ] );
 
 ok($r2->invalid('age1'));

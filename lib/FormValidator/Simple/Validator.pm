@@ -150,6 +150,7 @@ sub GREATER_THAN {
         qq/Validation GREATER_THAN needs a numeric argument./
         );
     }
+    return FALSE unless $data =~ /^\d+$/;
     return ( $data > $target ) ? TRUE : FALSE;
 }
 
@@ -162,6 +163,7 @@ sub LESS_THAN {
         qq/Validation LESS_THAN needs a numeric argument./
         );
     }
+    return FALSE unless $data =~ /^\d+$/;
     return ( $data < $target ) ? TRUE : FALSE;
 }
 
@@ -174,6 +176,7 @@ sub EQUAL_TO {
         qq/Validation EQUAL_TO needs a numeric argument./
         );
     }
+    return FALSE unless $data =~ /^\d+$/;
     return ( $data == $target ) ? TRUE : FALSE;
 }
 
@@ -184,11 +187,33 @@ sub BETWEEN {
     my $end   = $args->[1];
     unless ( $start && $start =~ /^\d+$/ && $end && $end =~ /^\d+$/ ) {
         FormValidator::Simple::Exception->throw(
-        qq/Validation BETWEEN need two numeric arguments./
+        qq/Validation BETWEEN needs two numeric arguments./
         );
     }
+    return FALSE unless $data =~ /^\d+$/;
     return ( $data >= $start && $data <= $end ) ? TRUE : FALSE;
 }
+
+sub DECIMAL {
+    my ($self, $params, $args) = @_;
+    my $data = $params->[0];
+    unless ( scalar(@$args) > 0 ) {
+        FormValidator::Simple::Exception->throw(
+        qq/Validation DECIMAL needs one or two numeric arguments./
+        );
+    }
+    my $digit1 = $args->[0];
+    my $digit2 = $args->[1] || 0;
+    unless ( $digit1 =~ /^\d+$/ && $digit2 =~ /^\d+$/ ) {
+        FormValidator::Simple::Exception->throw(
+        qq/Validation DECIMAL needs one or two numeric arguments./
+        );
+    }
+    return FALSE unless $data =~ /^\d+(\.\d+)?$/;
+    my $reg = qr/^\d{1,$digit1}(\.\d{0,$digit2})?$/;
+    return $data =~ /$reg/ ? TRUE : FALSE;
+}
+
 1;
 __END__
 
