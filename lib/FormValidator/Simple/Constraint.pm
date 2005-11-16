@@ -3,6 +3,7 @@ use strict;
 use base qw/Class::Accessor::Fast/;
 use FormValidator::Simple::Exception;
 use FormValidator::Simple::Validator;
+use FormValidator::Simple::Constants;
 
 __PACKAGE__->mk_accessors(qw/name command negative args/);
 
@@ -31,10 +32,10 @@ sub _check_name {
     my $name = $self->name;
     if($name =~ /^NOT_(.+)$/) {
         $self->command($1);
-        $self->negative(1);
+        $self->negative( TRUE );
     } else {
         $self->command($name);
-        $self->negative(undef);
+        $self->negative( FALSE );
     }
 }
 

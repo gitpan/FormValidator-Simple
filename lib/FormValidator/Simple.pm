@@ -10,7 +10,7 @@ use FormValidator::Simple::Profile;
 use FormValidator::Simple::Validator;
 use FormValidator::Simple::Constants;
 
-our $VERSION = '0.07';
+our $VERSION = '0.09';
 
 __PACKAGE__->mk_accessors(qw/data prof results/);
 
@@ -88,10 +88,6 @@ sub check {
         my $keys        = $profile->keys;
         my $constraints = $profile->constraints;
 
-        #KEYCHECK:
-        #foreach my $key (@$keys) {
-        #    next PROFILE unless $data->has_key($key);
-        #}
         my $params = $data->param($keys);
 
         $self->results->register($name);
@@ -462,23 +458,9 @@ or use 'load_plugin' method.
     use FormValidator::Simple;
     FormValidator::Simple->load_plugin('FormValidator::Simple::Plugin::CreditCard');
 
-=head1 TODO
+=head1 HANDLING RESULTS
 
-=over 4
-
-=item MORE VARIETY VALIDATIONS
-
-=item MESSAGE MAPPING
-
-sweet solution to put out messages on your application's error page.
-
-=item MORE VERBOSE EXCEPTION
-
-to make it easier to find wrong setting.
-
-=item MORE DOCUMENTATION
-
-=back
+See L<FormValidator::Simple::Results>
 
 =head1 SEE ALSO
 

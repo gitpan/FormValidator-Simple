@@ -3,6 +3,7 @@ use strict;
 use base qw/Class::Accessor::Fast/;
 use FormValidator::Simple::Constants;
 use FormValidator::Simple::Exception;
+use Tie::IxHash;
 
 __PACKAGE__->mk_accessors(qw/name constraints data is_blank/);
 
@@ -15,9 +16,11 @@ sub new {
 
 sub _init {
     my ($self, $name) = @_; 
+    my %constraints = ();
+    tie (%constraints, 'Tie::IxHash');
     $self->name($name);
-    $self->constraints( { } );
-    $self->data( '' );
+    $self->constraints(\%constraints);
+    $self->data(q{});
     $self->is_blank( FALSE );
 }
 

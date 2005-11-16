@@ -7,6 +7,7 @@ use FormValidator::Simple::Exception;
 use Email::Valid;
 use Email::Valid::Loose;
 use Date::Calc;
+use UNIVERSAL::require;
 
 __PACKAGE__->mk_classdata( options => { } );
 
@@ -15,6 +16,8 @@ sub SP {
     my $data = $params->[0];
     return $data =~ /\s/ ? TRUE : FALSE;
 }
+
+*SPACE = \&SP;
 
 sub INT {
     my ($self, $params, $args) = @_;
@@ -95,7 +98,41 @@ sub DATE {
     my ($self, $params, $args) = @_;
     my ($year, $month,  $day ) = @$params;
     my $result = Date::Calc::check_date($year, $month, $day) ? TRUE : FALSE;
-    return $result;
+    my $data;
+    if ($result) {
+        my $class = $self->options->{datetime_class} || '';
+        if ($class eq 'DateTime') {
+            $class->require;
+            if ($@) {
+            FormValidator::Simple::Exception->throw(
+            qq/Validation DATE: failed to require $class. "$@"./
+            );
+            }
+            my %date = (
+                year  => $year,
+                month => $month,
+                day   => $day,
+            );
+            if ($self->options->{time_zone}) {
+                $date{time_zone} = $self->options->{time_zone};
+            }
+            $data = $class->new(%date);
+        }
+        elsif ($class eq 'Time::Piece') {
+            $data = sprintf "%04d-%02d-%02d 00:00:00", $year, $month, $day;
+            $class->require;
+            if ($@) {
+            FormValidator::Simple::Exception->throw(
+            qq/Validation DATE: failed to require $class. "$@"./
+            );
+            }
+            $data = $class->strptime($data, "%Y-%m-%d %H:%M:%S");
+        }
+        else {
+            $data = sprintf "%04d-%02d-%02d 00:00:00", $year, $month, $day;
+        }
+    }
+    return ($result, $data);
 }
 
 sub TIME {
@@ -105,7 +142,8 @@ sub TIME {
     $min  ||= 0;
     $sec  ||= 0;
     my $result = Date::Calc::check_time($hour, $min, $sec) ? TRUE : FALSE;
-    return $result;
+    my $time = $result ? sprintf("%02d:%02d:%02d", $hour, $min, $sec) : undef;
+    return ($result, $time);
 }
 
 sub DATETIME {
@@ -116,7 +154,46 @@ sub DATETIME {
     $sec  ||= 0;
     my $result = Date::Calc::check_date($year, $month, $day)
               && Date::Calc::check_time($hour, $min,   $sec) ? TRUE : FALSE;
-    return $result;
+    my $data;
+    if ($result) {
+        my $class = $self->options->{datetime_class} || '';
+        if ($class eq 'DateTime') {
+            $class->require;
+            if ($@) {
+            FormValidator::Simple::Exception->throw(
+            qq/Validation DATETIME: failed to require $class. "$@"./
+            );
+            }
+            my %date = (
+                year   => $year,
+                month  => $month,
+                day    => $day,
+                hour   => $hour,
+                minute => $min,
+                second => $sec,
+            );
+            if ($self->options->{time_zone}) {
+                $date{time_zone} = $self->options->{time_zone};
+            }
+            $data = $class->new(%date);
+        }
+        elsif ($class eq 'Time::Piece') {
+            $data = sprintf "%04d-%02d-%02d %02d:%02d:%02d",
+                $year, $month, $day, $hour, $min, $sec;
+            $class->require;
+            if ($@) {
+            FormValidator::Simple::Exception->throw(
+            qq/Validation DATETIME: failed to require $class. "$@"./
+            );
+            }
+            $data = $class->strptime($data, "%Y-%m-%d %H:%M:%S");
+        }
+        else {
+            $data = sprintf "%04d-%02d-%02d %02d:%02d:%02d",
+                $year, $month, $day, $hour, $min, $sec;
+        }
+    }
+    return ($result, $data);
 }
 
 sub ANY {

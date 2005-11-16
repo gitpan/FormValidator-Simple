@@ -1,5 +1,5 @@
 use strict;
-use Test::More tests => 25;
+use Test::More tests => 29;
 
 BEGIN{ use_ok("FormValidator::Simple::Results") }
 
@@ -22,6 +22,8 @@ my $valids2 = $results->valid;
 is( scalar(keys %$valids2), 2     );
 ok( exists $valids2->{r2});
 ok( exists $valids2->{r3});
+ok( $results->has_error     );
+ok( !$results->success      );
 ok( $results->has_blank     );
 ok( !$results->has_invalid  );
 ok( $results->missing('r1') );
@@ -33,7 +35,9 @@ is( $missings[0],      'r1' );
 $results->record('r2')->set( 'ASCII' => 1     );
 $results->record('r2')->set( 'INT'   => undef );
 
+ok( $results->has_error   );
 ok( $results->has_invalid );
+ok( !$results->success    );
 
 my @invalids = $results->invalid;
 is( scalar(@invalids), 1     );

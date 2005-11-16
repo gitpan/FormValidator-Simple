@@ -11,6 +11,7 @@ WriteMakefile(
 		'Email::Valid'             => 0.15,
 		'Email::Valid::Loose'      => 0.04,
         'Date::Calc'               => 5.4,
+        'Tie::IxHash'              => 0,
 	}, # e.g., Module::Name => 1.1
 );
 
