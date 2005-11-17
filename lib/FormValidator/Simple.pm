@@ -1,6 +1,6 @@
 package FormValidator::Simple;
 use strict;
-use base qw/Class::Accessor::Fast/;
+use base qw/Class::Accessor::Fast Class::Data::Inheritable/;
 use Class::Inspector;
 use UNIVERSAL::require;
 use FormValidator::Simple::Results;
@@ -9,10 +9,13 @@ use FormValidator::Simple::Data;
 use FormValidator::Simple::Profile;
 use FormValidator::Simple::Validator;
 use FormValidator::Simple::Constants;
+use FormValidator::Simple::Messages;
 
-our $VERSION = '0.09';
+our $VERSION = '0.10';
 
 __PACKAGE__->mk_accessors(qw/data prof results/);
+
+__PACKAGE__->mk_classdata( messages => FormValidator::Simple::Messages->new );
 
 sub import {
     my $class = shift;
@@ -42,6 +45,12 @@ sub load_plugin {
     }
 }
 
+sub set_messages {
+    my ($proto, $file) = @_;
+    my $class = ref $proto || $proto;
+    $class->messages->load($file);
+}
+
 sub new {
     my $proto = shift;
     my $class = ref $proto || $proto;
@@ -52,8 +61,11 @@ sub new {
 
 sub _init {
     my ($self, %options) = @_;
+    my $class = ref $self;
     FormValidator::Simple::Validator->options( \%options );
-    $self->results( FormValidator::Simple::Results->new );
+    $self->results( FormValidator::Simple::Results->new(
+        messages => $class->messages,
+    ) );
 }
 
 sub set_invalid {
@@ -145,14 +157,14 @@ FormValidator::Simple - validation with simple chains of constraints
         { date  => ['year',  'month', 'day'] } => ['DATE'],
     ] );
 
-    if ( $result->has_missing or $results->has_invalid ) {
+    if ( $result->has_error ) {
         my $tt = Template->new({ INCLUDE_PATH => './tmpl' });
         $tt->process('template.html', { result => $result });
     }
 
 template example
 
-    [% IF result.has_invalid || result.has_missing %]
+    [% IF result.has_error %]
     <p>Found Input Error</p>
     <ul>
 
@@ -172,6 +184,18 @@ template example
         <li>input into param1 with characters that's length should be between two and five. </li>
         [% END %]
 
+    </ul>
+    [% END %]
+
+example2
+
+    [% IF result.has_error %]
+    <ul>
+        [% FOREACH key IN result.error %]
+            [% FOREACH type IN result.error(key) %]
+            <li>invalid: [% key %] - [% type %]</li>
+            [% END %]
+        [% END %]
     </ul>
     [% END %]
 
@@ -458,7 +482,72 @@ or use 'load_plugin' method.
     use FormValidator::Simple;
     FormValidator::Simple->load_plugin('FormValidator::Simple::Plugin::CreditCard');
 
-=head1 HANDLING RESULTS
+=head1 MESSAGE HANDLING
+
+You can custom your own message with key and type.
+
+    [% IF result.has_error %]
+        [% FOREACH key IN result.error %]
+            [% FOREACH type IN result.error(key) %]
+            <p>error message:[% type %] - [% key %]</p>
+            [% END %]
+        [% END %]
+    [% END %]
+
+And you can also set messages configuration before.
+You can prepare configuration as hash reference.
+
+    FormValidator::Simple->set_messages( {
+        action1 => {
+            name => {
+                NOT_BLANK => 'input name!',
+                LENGTH    => 'input name (length should be between 0 and 10)!',
+            },
+            email => {
+                DEFAULT => 'input correct email address!',
+            },
+        },
+    } );
+
+or a YAML file.
+
+    # messages.yml
+    action1:
+        name:
+            NOT_BLANK: input name!
+            LENGTH: input name(length should be between 0 and 10)!
+        email:
+            DEFAULT: input correct email address!
+
+    # in your perl-script, set the file's path.
+    FormValidator::Simple->set_messages('messages.yml');
+
+DEFAULT is a special type.
+If it can't find setting for indicated validation-type, it uses message set for DEFAULT.
+
+after setting, execute check(),
+
+    my $result = FormValidator::Simple->check( $q => [
+        name  => [qw/NOT_BLANK/, [qw/LENGTH 0 10/] ],
+        email => [qw/NOT_BLANK EMAIL_LOOSE/, [qw/LENGTH 0 20/] ],
+    ] );
+
+    # matching result and messages for indicated action.
+    my $messages = $result->messages('action1');
+
+    foreach my $message ( @$messages ) {
+        print $message, "\n";
+    }
+
+If in template file,
+
+    [% IF result.has_error %]
+        [% FOREACH msg IN result.messages('action1') %]
+        <p>[% msg %]</p>
+        [% END %]
+    [% END %]
+
+=head1 RESULT HANDLING
 
 See L<FormValidator::Simple::Results>
 

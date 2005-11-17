@@ -5,8 +5,9 @@ use FormValidator::Simple::Result;
 use FormValidator::Simple::Exception;
 use FormValidator::Simple::Constants;
 use Tie::IxHash;
+use List::MoreUtils;
 
-__PACKAGE__->mk_accessors(qw/_records/);
+__PACKAGE__->mk_accessors(qw/_records message/);
 
 sub new {
     my $class = shift;
@@ -16,10 +17,28 @@ sub new {
 }
 
 sub _init {
-    my $self = shift;
+    my ($self, %args) = @_;
     my %hash = ();
     tie (%hash, 'Tie::IxHash');
     $self->_records(\%hash);
+
+    my $messages = delete $args{messages};
+    $self->message($messages);
+}
+
+sub messages {
+    my ($self, $action) = @_;
+    my @messages = ();
+    my $keys = $self->error;
+    foreach my $key ( @$keys ) {
+        my $types = $self->error($key);
+        foreach my $type ( @$types ) {
+            push @messages,
+                $self->message->get($action, $key, $type);
+        }
+    }
+    @messages = List::MoreUtils::uniq(@messages);
+    return \@messages;
 }
 
 sub register {

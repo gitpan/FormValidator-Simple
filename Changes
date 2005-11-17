@@ -1,5 +1,8 @@
 Revision history for Perl extension FormValidator::Simple.
 
+0.10  Thu Nov 17 12:00:00 2005
+    - added error-message handler
+
 0.09  Wed Nov 16 23:00:00 2005
     - added documentation for FormValidation::Simple::Results
 
