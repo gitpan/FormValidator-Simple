@@ -1,5 +1,8 @@
 Revision history for Perl extension FormValidator::Simple.
 
+0.11  Thu Nov 24 00:45:00 2005
+    - added set_option method
+
 0.10  Thu Nov 17 12:00:00 2005
     - added error-message handler
 

@@ -22,7 +22,7 @@ sub load {
         };
         if ($@) {
         FormValidator::Simple::Exception->throw(
-        qq/faled to load YAML file. "$@"/
+        qq/failed to load YAML file. "$@"/
         );
         }
     }
@@ -38,13 +38,11 @@ sub get {
     my $data = $self->{_data};
     unless ($data) {
     FormValidator::Simple::Exception->throw(
-    qq/load file before calling get()./
+    qq/set messages before calling get()./
     );
     }
     unless ( exists $data->{$action} ) {
-    FormValidator::Simple::Exception->throw(
-    qq/Unknown action-name "$action"./
-    );
+        return "$name is invalid.";
     }
     if ( exists $data->{$action}{$name} ) {
         my $conf = $data->{$action}{$name};
@@ -53,11 +51,6 @@ sub get {
         }
         elsif ( exists $conf->{DEFAULT} ) {
             return $conf->{DEFAULT};
-        }
-        else {
-        FormValidator::Simple::Exception->throw(
-        qq/Unknown validation type "$type"./
-        );
         }
     }
     return "$name is invalid.";

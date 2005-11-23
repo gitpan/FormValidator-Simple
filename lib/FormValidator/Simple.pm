@@ -11,7 +11,7 @@ use FormValidator::Simple::Validator;
 use FormValidator::Simple::Constants;
 use FormValidator::Simple::Messages;
 
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 
 __PACKAGE__->mk_accessors(qw/data prof results/);
 
@@ -45,6 +45,13 @@ sub load_plugin {
     }
 }
 
+sub set_option {
+    my $class = shift;
+    while ( my ($key, $val) = splice @_, 0, 2 ) {
+        FormValidator::Simple::Validator->options->{$key} = $val;
+    }
+}
+
 sub set_messages {
     my ($proto, $file) = @_;
     my $class = ref $proto || $proto;
@@ -60,9 +67,9 @@ sub new {
 }
 
 sub _init {
-    my ($self, %options) = @_;
+    my ($self, @args) = @_;
     my $class = ref $self;
-    FormValidator::Simple::Validator->options( \%options );
+    $class->set_option(@args);
     $self->results( FormValidator::Simple::Results->new(
         messages => $class->messages,
     ) );
@@ -301,6 +308,26 @@ template example
     [% IF results.invalid('param3', 'MY_ERROR') %]
     ...
     [% END %]
+
+=head1 HOW TO SET OPTIONS
+
+Option setting is needed by some validation, especially in plugins.
+
+You can set them in two ways.
+
+    FormValidator::Simple->set_option(
+        dbic_base_class => 'MyProj::Model::DBIC',
+        charset         => 'euc',
+    );
+
+or
+
+    $valid = FormValidator::Simple->new(
+        dbic_base_class => 'MyProj::Model::DBIC',
+        charset         => 'euc',
+    );
+
+    $valid->check(...)
 
 =head1 VALIDATION COMMANDS
 

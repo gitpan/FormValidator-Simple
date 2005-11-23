@@ -40,5 +40,6 @@ t/20_numeric_cmp.t
 t/21_decimal.t
 t/22_messages.t
 t/23_messages_yaml.t
+t/24_options.t
 t/conf/messages.yml
 t/lib/FormValidator/Simple/Plugin/Sample.pm
