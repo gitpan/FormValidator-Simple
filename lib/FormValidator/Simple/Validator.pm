@@ -291,6 +291,16 @@ sub DECIMAL {
     return $data =~ /$reg/ ? TRUE : FALSE;
 }
 
+sub ALL {
+    my ($self, $params, $args) = @_;
+    foreach my $param ( @$params ) {
+        unless ( defined $param && $param ne '' ) {
+            return FALSE;
+        }
+    }
+    return TRUE;
+}
+
 1;
 __END__
 

@@ -11,7 +11,7 @@ use FormValidator::Simple::Validator;
 use FormValidator::Simple::Constants;
 use FormValidator::Simple::Messages;
 
-our $VERSION = '0.11';
+our $VERSION = '0.12';
 
 __PACKAGE__->mk_accessors(qw/data prof results/);
 
@@ -227,7 +227,7 @@ Use 'check' method.
 
 A hash reference includes input data, or an object of some class that has a method named 'param', for example L<CGI>, is needed as first argument.
 
-And set profile as array reference into second argument. Profile confists of some pairs of input data and constraints.
+And set profile as array reference into second argument. Profile consists of some pairs of input data and constraints.
 
     my $q = CGI->new;
     $q->param( param1 => 'hoge' );
