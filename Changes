@@ -1,5 +1,9 @@
 Revision history for Perl extension FormValidator::Simple.
 
+0.13  Thu Nov 24 00:45:00 2005
+    - added set_message_format
+      Thanks to Daisuke Murase.
+
 0.12  Thu Nov 24 00:45:00 2005
     - added validation ALL
 

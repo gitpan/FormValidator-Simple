@@ -6,9 +6,18 @@ use FormValidator::Simple::Exception;
 sub new {
     my $class = shift;
     my $self  = bless {
-        _data => undef,
+        _data   => undef,
+        _format => "%s",
     }, $class;
     return $self;
+}
+
+sub format {
+    my ($self, $format) = @_;
+    if ($format) {
+        $self->{_format} = $format;
+    }
+    $self->{_format};
 }
 
 sub load {
@@ -34,18 +43,61 @@ sub load {
 }
 
 sub get {
+    my $self = shift;
+    my $msg  = $self->_get(@_);
+    return sprintf $self->format, $msg;
+}
+
+sub _get {
     my ($self, $action, $name, $type) = @_;
     my $data = $self->{_data};
     unless ($data) {
-    FormValidator::Simple::Exception->throw(
-    qq/set messages before calling get()./
-    );
+        FormValidator::Simple::Exception->throw(
+        qq/set messages before calling get()./
+        );
     }
-    unless ( exists $data->{$action} ) {
-        return "$name is invalid.";
+
+    unless ( $action && exists $data->{$action} ) {
+        if ( exists $data->{DEFAULT} ) {
+            if ( exists $data->{DEFAULT}{$name} ) {
+                my $conf = $data->{DEFAULT}{$name};
+                if ( exists $conf->{$type} ) {
+                    return $conf->{$type};
+                }
+                elsif ( exists $conf->{DEFAULT} ) {
+                    return $conf->{DEFAULT};
+                }
+            }
+            else {
+                return "$name is invalid.";
+            }
+        }
+        else {
+            return "$name is invalid.";
+        }
     }
     if ( exists $data->{$action}{$name} ) {
         my $conf = $data->{$action}{$name};
+        if ( exists $conf->{$type} ) {
+            return $conf->{$type};
+        }
+        elsif ( exists $conf->{DEFAULT} ) {
+            return $conf->{DEFAULT};
+        }
+        elsif ( exists  $data->{DEFAULT}
+              && exists $data->{DEFAULT}{$name} ) {
+            my $conf = $data->{DEFAULT}{$name};
+            if ( exists $conf->{$type} ) {
+                return $conf->{$type};
+            }
+            elsif ( exists $conf->{DEFAULT} ) {
+                return $conf->{DEFAULT};
+            }
+        }
+    }
+    elsif ( exists $data->{DEFAULT}
+         && exists $data->{DEFAULT}{$name} ) {
+        my $conf = $data->{DEFAULT}{$name};
         if ( exists $conf->{$type} ) {
             return $conf->{$type};
         }

@@ -11,7 +11,7 @@ use FormValidator::Simple::Validator;
 use FormValidator::Simple::Constants;
 use FormValidator::Simple::Messages;
 
-our $VERSION = '0.12';
+our $VERSION = '0.13';
 
 __PACKAGE__->mk_accessors(qw/data prof results/);
 
@@ -56,6 +56,13 @@ sub set_messages {
     my ($proto, $file) = @_;
     my $class = ref $proto || $proto;
     $class->messages->load($file);
+}
+
+sub set_message_format {
+    my ($proto, $format) = @_;
+    $format ||= '';
+    my $class = ref $proto || $proto;
+    $class->messages->format($format);
 }
 
 sub new {
@@ -539,13 +546,19 @@ You can prepare configuration as hash reference.
 or a YAML file.
 
     # messages.yml
+    DEFAULT:
+        name:
+            DEFAULT: name is invalid!
     action1:
         name:
             NOT_BLANK: input name!
             LENGTH: input name(length should be between 0 and 10)!
         email:
             DEFAULT: input correct email address!
-
+    action2:
+        name:
+            DEFAULT: ...
+            
     # in your perl-script, set the file's path.
     FormValidator::Simple->set_messages('messages.yml');
 
@@ -566,12 +579,24 @@ after setting, execute check(),
         print $message, "\n";
     }
 
+When it can't find indicated action, name, and type, it searches proper message from DEFAULT action.
 If in template file,
 
     [% IF result.has_error %]
         [% FOREACH msg IN result.messages('action1') %]
         <p>[% msg %]</p>
         [% END %]
+    [% END %]
+
+you can set each message format.
+
+    FormValidator::Simple->set_message_format('<p>%s</p>');
+    my $result = FormValidator::Simple->check( $q => [
+        ...profile
+    ] );
+
+    [% IF result.has_error %]
+        [% result.messages('action1').join("\n") %]
     [% END %]
 
 =head1 RESULT HANDLING
