@@ -25,6 +25,12 @@ sub INT {
     return $data =~ /^\-?[\d]+$/ ? TRUE : FALSE;
 }
 
+sub UINT {
+    my ($self, $params, $args) = @_;
+    my $data = $params->[0];
+    return $data =~ /^\d+$/ ? TRUE : FALSE;
+}
+
 sub ASCII {
     my ($self, $params, $args) = @_;
     my $data = $params->[0];

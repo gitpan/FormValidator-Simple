@@ -11,7 +11,7 @@ use FormValidator::Simple::Validator;
 use FormValidator::Simple::Constants;
 use FormValidator::Simple::Messages;
 
-our $VERSION = '0.13';
+our $VERSION = '0.14';
 
 __PACKAGE__->mk_accessors(qw/data prof results/);
 
@@ -355,6 +355,11 @@ check if the data has space or not.
 =item INT
 
 check if the data is integer or not.
+
+=item UINT
+
+unsigined integer check.
+for example, if -1234 is input, the validation judges it invalid.
 
 =item DECIMAL
 
