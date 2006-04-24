@@ -1,5 +1,17 @@
 Revision history for Perl extension FormValidator::Simple.
 
+0.15  Mon Apr 24 11:51:00 2006
+    - added IN_ARRAY validation
+      Thanks to Masahiro Nagano.
+
+    - bugfix:
+        fixed to use Scalar::Util::blessed instead of UNIVERSAL::isa
+        because of its unexpected work on perl 5.8.0.
+        Thanks to Toru Yamaguchi
+        
+        allow to handle 0 on 'BETWEEN' validation
+        Thanks to Masahiro Nagano.
+        
 0.14  Mon Mar 13 03:19:00 2006
     - added UINT validation
       Thanks to Tokuhirom.

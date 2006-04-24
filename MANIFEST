@@ -1,4 +1,8 @@
 Changes
+MANIFEST
+META.yml
+Makefile.PL
+README
 lib/FormValidator/Simple.pm
 lib/FormValidator/Simple/ArrayList.pm
 lib/FormValidator/Simple/Constants.pm
@@ -12,10 +16,6 @@ lib/FormValidator/Simple/Profile.pm
 lib/FormValidator/Simple/Result.pm
 lib/FormValidator/Simple/Results.pm
 lib/FormValidator/Simple/Validator.pm
-Makefile.PL
-MANIFEST
-META.yml
-README
 t/00_compile.t
 t/01_constraint.t
 t/02_constraints.t
@@ -42,5 +42,6 @@ t/22_messages.t
 t/23_messages_yaml.t
 t/24_options.t
 t/25_all.t
+t/26_inarray.t
 t/conf/messages.yml
 t/lib/FormValidator/Simple/Plugin/Sample.pm

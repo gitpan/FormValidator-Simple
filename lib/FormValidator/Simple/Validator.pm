@@ -8,6 +8,7 @@ use Email::Valid;
 use Email::Valid::Loose;
 use Date::Calc;
 use UNIVERSAL::require;
+use List::MoreUtils;
 
 __PACKAGE__->mk_classdata( options => { } );
 
@@ -268,7 +269,7 @@ sub BETWEEN {
     my $data = $params->[0];
     my $start = $args->[0];
     my $end   = $args->[1];
-    unless ( $start && $start =~ /^\d+$/ && $end && $end =~ /^\d+$/ ) {
+    unless ( defined($start) && $start =~ /^\d+$/ && defined($end) && $end =~ /^\d+$/ ) {
         FormValidator::Simple::Exception->throw(
         qq/Validation BETWEEN needs two numeric arguments./
         );
@@ -305,6 +306,12 @@ sub ALL {
         }
     }
     return TRUE;
+}
+
+sub IN_ARRAY {
+    my ($class, $params, $args) = @_;
+    my $data = $params->[0] || '';
+    return (List::MoreUtils::any { $_ eq $data } @$args) ? TRUE : FALSE;
 }
 
 1;

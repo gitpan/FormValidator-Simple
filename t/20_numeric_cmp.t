@@ -27,7 +27,7 @@ my $r2 = FormValidator::Simple->check( $q => [
     age1 => [ 'INT', [qw/GREATER_THAN 30/] ],
     age2 => [ 'INT', [qw/LESS_THAN 20/] ],
     age3 => [ 'INT', [qw/EQUAL_TO 22/] ],
-    age4 => [ 'INT', [qw/BETWEEN 20 22/] ],
+    age4 => [ 'INT', [qw/BETWEEN 0 22/] ],
 ] );
 
 ok($r2->invalid('age1'));

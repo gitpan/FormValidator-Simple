@@ -14,6 +14,7 @@ WriteMakefile(
         'Tie::IxHash'              => 1.21,
         'YAML'                     => 0.39,
         'List::MoreUtils'          => 0.16,
+        'Scalar::Util'             => 0,
 	}, # e.g., Module::Name => 1.1
 );
 

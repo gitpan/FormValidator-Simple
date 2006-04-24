@@ -1,6 +1,6 @@
 package FormValidator::Simple::Data;
 use strict;
-use UNIVERSAL;
+use Scalar::Util;
 use FormValidator::Simple::Exception;
 use FormValidator::Simple::Constants;
 
@@ -15,7 +15,7 @@ sub _init {
     my ($self, $input) = @_;
     $self->{_records} = {};
     my $errmsg = qq/Set input data as a hashref or object that has the method 'param()'./;
-    if ( UNIVERSAL::isa( $input, 'UNIVERSAL' ) ) {
+    if ( Scalar::Util::blessed($input) ) {
         unless ( $input->can('param') ) {
             FormValidator::Simple::Exception->throw($errmsg);
         }

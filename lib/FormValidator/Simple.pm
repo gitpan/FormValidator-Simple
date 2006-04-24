@@ -11,7 +11,7 @@ use FormValidator::Simple::Validator;
 use FormValidator::Simple::Constants;
 use FormValidator::Simple::Messages;
 
-our $VERSION = '0.14';
+our $VERSION = '0.15';
 
 __PACKAGE__->mk_accessors(qw/data prof results/);
 
