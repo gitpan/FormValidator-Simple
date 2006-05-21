@@ -9,6 +9,7 @@ use Email::Valid::Loose;
 use Date::Calc;
 use UNIVERSAL::require;
 use List::MoreUtils;
+use DateTime::Format::Strptime;
 
 __PACKAGE__->mk_classdata( options => { } );
 
@@ -310,8 +311,63 @@ sub ALL {
 
 sub IN_ARRAY {
     my ($class, $params, $args) = @_;
-    my $data = $params->[0] || '';
+    my $data = defined $params->[0] ? $params->[0] : '';
     return (List::MoreUtils::any { $_ eq $data } @$args) ? TRUE : FALSE;
+}
+
+sub DATETIME_FORMAT {
+    my ( $self, $params, $args ) = @_;
+    my $date   = $params->[0];
+    my $format = $args->[0];
+    FormValidator::Simple::Exception->throw(
+        qq/Validation DATETIME_FORMAT needs a format argument./)
+      unless $format;
+
+    my $module;
+    if ( ref $format ) {
+        $module = $format;
+    }
+    else {
+        $module = "DateTime::Format::$format";
+        $module->require
+          or FormValidator::Simple::Exception->throw(
+            qq/Validation DATETIME_FORMAT: failed to require $module. "$@"/ );
+    }
+    my $dt;
+    eval {
+        $dt = $module->parse_datetime($date);
+    };
+    my $result = $dt ? TRUE : FALSE;
+
+    if ( $dt && $self->options->{time_zone} ) {
+        $dt->set_time_zone( $self->options->{time_zone} );
+    }
+    return ($result, $dt);
+}
+
+sub DATETIME_STRPTIME {
+    my ( $self, $params, $args ) = @_;
+    my $date   = $params->[0];
+    my $format = $args->[0];
+    FormValidator::Simple::Exception->throw(
+        qq/Validation DATETIME_STRPTIME needs a format argument./)
+      unless $format;
+
+    my $dt;
+    eval{
+        my $strp = DateTime::Format::Strptime->new(
+            pattern => $format,
+            on_error => 'croak'
+        );
+        $dt = $strp->parse_datetime($date);
+    };
+
+    my $result = $dt ? TRUE : FALSE;
+
+    if ( $dt && $self->options->{time_zone} ) {
+        $dt->set_time_zone( $self->options->{time_zone} );
+    }
+    return ($result, $dt);
 }
 
 1;

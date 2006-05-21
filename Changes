@@ -1,5 +1,13 @@
 Revision history for Perl extension FormValidator::Simple.
 
+0.16  Tue May 16 10:19:00 2006
+    - added DATETIME_FORMAT and DATETIME_STRPTIME validation
+      Thanks to Masahiro Nagano and fbis.
+
+      new sample for IN_ARRAY on POD
+      bugfix: IN_ARRAY didn't work well with numeric arguments.
+      Thanks to ISLUE
+
 0.15  Mon Apr 24 11:51:00 2006
     - added IN_ARRAY validation
       Thanks to Masahiro Nagano.

@@ -11,7 +11,7 @@ use FormValidator::Simple::Validator;
 use FormValidator::Simple::Constants;
 use FormValidator::Simple::Messages;
 
-our $VERSION = '0.15';
+our $VERSION = '0.16';
 
 __PACKAGE__->mk_accessors(qw/data prof results/);
 
@@ -468,6 +468,29 @@ check with L<Date::Calc>
         { datetime => [qw/year month day hour min sec/] } => ['DATETIME']
     ] );
 
+=item DATETIME_STRPTIME
+
+check with L<DateTime::Format::Strptime>.
+
+    my $q = CGI->new;
+    $q->param( datetime => '2006-04-26T19:09:21+0900' );
+
+    my $result = FormValidator::Simple->check( $q => [
+      datetime => [ [ 'DATETIME_STRPTIME', '%Y-%m-%dT%T%z' ] ],
+    ] );
+
+=item DATETIME_FORMAT
+
+check with DateTime::Format::***. for example, L<DateTime::Format::HTTP>,
+L<DateTime::Format::Mail>, L<DateTime::Format::MySQL> and etc.
+
+    my $q = CGI->new;
+    $q->param( datetime => '2004-04-26 19:09:21' );
+
+    my $result = FormValidator::Simple->check( $q => [
+      datetime => [ [qw/DATETIME_FORMAT MySQL/] ],
+    ] );
+
 =item GREATER_THAN
 
 numeric comparison
@@ -507,6 +530,16 @@ check if there is not blank data in multiple data.
     my $result = FormValidator::Simple->check( $q => [ 
         { some_data => [qw/param1 param2 param3/] } => ['ANY']
     ] );
+
+=back
+
+=item IN_ARRAY
+
+check if the food ordered is in menu
+
+    my $result = FormValidator::Simple->check( $q => [
+        food => [ ['IN_ARRAY', qw/noodle soba spaghetti/] ],
+    ] };
 
 =back
 

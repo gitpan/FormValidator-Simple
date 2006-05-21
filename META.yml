@@ -1,7 +1,7 @@
 # http://module-build.sourceforge.net/META-spec.html
 #XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
 name:         FormValidator-Simple
-version:      0.14
+version:      0.16
 version_from: lib/FormValidator/Simple.pm
 installdirs:  site
 requires:
@@ -9,13 +9,15 @@ requires:
     Class::Data::Inheritable:      0.04
     Class::Inspector:              1.13
     Date::Calc:                    5.4
+    DateTime::Format::Strptime:    1.07
     Email::Valid:                  0.15
     Email::Valid::Loose:           0.04
     List::MoreUtils:               0.16
     Mail::Address:                 0
+    Scalar::Util:                  0
     Tie::IxHash:                   1.21
     UNIVERSAL::require:            0.1
     YAML:                          0.39
 
 distribution_type: module
-generated_by: ExtUtils::MakeMaker version 6.29
+generated_by: ExtUtils::MakeMaker version 6.17
