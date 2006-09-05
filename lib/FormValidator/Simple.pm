@@ -1,8 +1,9 @@
 package FormValidator::Simple;
 use strict;
-use base qw/Class::Accessor::Fast Class::Data::Inheritable/;
+use base qw/Class::Accessor::Fast Class::Data::Inheritable Class::Data::Accessor/;
 use Class::Inspector;
 use UNIVERSAL::require;
+use Scalar::Util qw/blessed/;
 use FormValidator::Simple::Results;
 use FormValidator::Simple::Exception;
 use FormValidator::Simple::Data;
@@ -11,11 +12,10 @@ use FormValidator::Simple::Validator;
 use FormValidator::Simple::Constants;
 use FormValidator::Simple::Messages;
 
-our $VERSION = '0.16';
+our $VERSION = '0.17';
 
-__PACKAGE__->mk_accessors(qw/data prof results/);
-
-__PACKAGE__->mk_classdata( messages => FormValidator::Simple::Messages->new );
+__PACKAGE__->mk_classaccessors(qw/data prof results/);
+__PACKAGE__->mk_classaccessor( messages => FormValidator::Simple::Messages->new );
 
 sub import {
     my $class = shift;
@@ -55,14 +55,20 @@ sub set_option {
 sub set_messages {
     my ($proto, $file) = @_;
     my $class = ref $proto || $proto;
-    $class->messages->load($file);
+    if (blessed $proto) {
+        $proto->messages(FormValidator::Simple::Messages->new)->load($file);
+        $proto->results( FormValidator::Simple::Results->new(
+            messages => $proto->messages,
+        ) );
+    } else {
+        $class->messages->load($file);
+    }
 }
 
 sub set_message_format {
     my ($proto, $format) = @_;
     $format ||= '';
-    my $class = ref $proto || $proto;
-    $class->messages->format($format);
+    $proto->messages->format($format);
 }
 
 sub new {
@@ -78,7 +84,7 @@ sub _init {
     my $class = ref $self;
     $class->set_option(@args);
     $self->results( FormValidator::Simple::Results->new(
-        messages => $class->messages,
+        messages => $self->messages,
     ) );
 }
 
@@ -100,7 +106,7 @@ sub set_invalid {
 sub check {
     my ($proto, $input, $prof, $options) = @_;
     $options ||= {};
-    my $self = ref $proto ? $proto : $proto->new(%$options);
+    my $self = blessed $proto ? $proto : $proto->new(%$options);
 
     my $data = FormValidator::Simple::Data->new($input);
     my $prof_setting = FormValidator::Simple::Profile->new($prof);
@@ -530,8 +536,6 @@ check if there is not blank data in multiple data.
     my $result = FormValidator::Simple->check( $q => [ 
         { some_data => [qw/param1 param2 param3/] } => ['ANY']
     ] );
-
-=back
 
 =item IN_ARRAY
 

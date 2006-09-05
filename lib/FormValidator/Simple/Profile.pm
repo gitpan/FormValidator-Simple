@@ -6,9 +6,10 @@ use FormValidator::Simple::Iterator;
 
 sub _init {
     my($self, $prof) = @_;
-    while ( my($keys, $constraints) = splice(@$prof, 0, 2) ) {
+    for (my $i = 0; $i <= $#{$prof}; $i += 2) {
+        my ($key, $constraints) = ($prof->[$i], $prof->[$i + 1]);
         my $record = FormValidator::Simple::Profile::Record->new;
-        $record->set_keys($keys);
+        $record->set_keys($key);
         $record->set_constraints($constraints);
         $self->append($record);
     }

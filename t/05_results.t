@@ -1,5 +1,5 @@
 use strict;
-use Test::More tests => 29;
+use Test::More tests => 34;
 
 BEGIN{ use_ok("FormValidator::Simple::Results") }
 
@@ -54,4 +54,11 @@ is( scalar(keys %$valids3), 1     );
 ok( exists $valids3->{r3});
 is( $results->valid('r3'), 'data' );
 
+
+$results->clear;
+is(scalar keys %{$results->valid}, 0);
+is(scalar @{$results->missing}, 0);
+ok(!$results->has_error);
+ok(!$results->has_invalid);
+ok($results->success);
 

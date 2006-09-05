@@ -1,5 +1,12 @@
 Revision history for Perl extension FormValidator::Simple.
 
+0.17  Tue Sep 05 15:22:00 2006
+    - took CLACO's patch that resolves RT issues: 21224, 20658, 19667.
+        RT20658: fixed POD error, thanks to ISHIGAKI.
+        RT20658: fixed Profile _init from eating profile via slice
+                 set_messages on object now overrides messages set on class
+        RT21224: added 'clear' method to FVS::Results. Thanks to CLACO.
+
 0.16  Tue May 16 10:19:00 2006
     - added DATETIME_FORMAT and DATETIME_STRPTIME validation
       Thanks to Masahiro Nagano and fbis.

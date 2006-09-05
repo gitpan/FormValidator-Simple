@@ -1,5 +1,5 @@
 use strict;
-use Test::More tests => 23;
+use Test::More tests => 24;
 use CGI;
 
 BEGIN { use_ok("FormValidator::Simple"); }
@@ -64,3 +64,16 @@ my $results3 = $valid->results;
 
 ok($results3->invalid('hoge'));
 ok($results3->invalid( hoge => 'HOGE' ));
+
+# make sure check doesn't eat the profile
+my $profile = [
+  text => [qw/NOT_BLANK INT/],
+  int  => [qw/NOT_BLANK INT/],
+];
+
+my $r3 = FormValidator::Simple->check( $q => $profile );
+is_deeply( $profile, [
+  text => [qw/NOT_BLANK INT/],
+  int  => [qw/NOT_BLANK INT/],
+] );
+

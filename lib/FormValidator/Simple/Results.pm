@@ -177,6 +177,10 @@ sub invalid {
     }
 }
 
+sub clear {
+  %{shift->_records} = ();
+}
+
 1;
 __END__
 

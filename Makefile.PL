@@ -6,6 +6,7 @@ WriteMakefile(
     'Class::Accessor'            => 0.22,
     'Class::Inspector'           => 1.13,
     'Class::Data::Inheritable'   => 0.04,
+    'Class::Data::Accessor'      => 0,
     'UNIVERSAL::require'         => 0.10,
     'Mail::Address'              => 0,
     'Email::Valid'               => 0.15,
