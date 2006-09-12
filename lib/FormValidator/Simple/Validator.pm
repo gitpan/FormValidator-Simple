@@ -230,7 +230,7 @@ sub GREATER_THAN {
     my ($self, $params, $args) = @_;
     my $data = $params->[0];
     my $target = $args->[0];
-    unless ( $target && $target =~ /^\d+$/ ) {
+    unless ( defined $target && $target =~ /^\d+$/ ) {
         FormValidator::Simple::Exception->throw(
         qq/Validation GREATER_THAN needs a numeric argument./
         );
@@ -243,7 +243,7 @@ sub LESS_THAN {
     my ($self, $params, $args) = @_;
     my $data = $params->[0];
     my $target = $args->[0];
-    unless ( $target && $target =~ /^\d+$/ ) {
+    unless ( defined $target && $target =~ /^\d+$/ ) {
         FormValidator::Simple::Exception->throw(
         qq/Validation LESS_THAN needs a numeric argument./
         );
@@ -256,7 +256,7 @@ sub EQUAL_TO {
     my ($self, $params, $args) = @_;
     my $data = $params->[0];
     my $target = $args->[0];
-    unless ( $target && $target =~ /^\d+$/ ) {
+    unless ( defined $target && $target =~ /^\d+$/ ) {
         FormValidator::Simple::Exception->throw(
         qq/Validation EQUAL_TO needs a numeric argument./
         );

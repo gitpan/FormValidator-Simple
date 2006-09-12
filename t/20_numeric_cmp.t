@@ -1,5 +1,5 @@
 use strict;
-use Test::More tests => 9;
+use Test::More tests => 12;
 use CGI;
 
 BEGIN{ use_ok("FormValidator::Simple") }
@@ -34,4 +34,14 @@ ok($r2->invalid('age1'));
 ok($r2->invalid('age2'));
 ok($r2->invalid('age3'));
 ok($r2->invalid('age4'));
+
+my $r3 = FormValidator::Simple->check( $q => [
+  age1 => [ 'INT', [qw/GREATER_THAN 0/] ],
+  age2 => [ 'INT', [qw/LESS_THAN 0/]    ],
+  age3 => [ 'INT', [qw/EQUAL_TO 0/]     ],
+] );
+
+ok(!$r3->invalid('age1'));
+ok($r3->invalid('age2'));
+ok($r3->invalid('age3'));
 

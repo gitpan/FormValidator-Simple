@@ -1,5 +1,10 @@
 Revision history for Perl extension FormValidator::Simple.
 
+0.18  Tue Sep 12 18:20:00 2006
+    - bugfix:
+        numeric comperison, GREATER_THAN, LESS_THAN, and EQUAL_TO doesn't work
+        as expected when 0 is passed as arguments. Thanks to Ryo Okamoto.
+
 0.17  Tue Sep 05 15:22:00 2006
     - took CLACO's patch that resolves RT issues: 21224, 20658, 19667.
         RT20658: fixed POD error, thanks to ISHIGAKI.
