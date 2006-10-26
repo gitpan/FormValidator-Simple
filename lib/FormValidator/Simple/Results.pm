@@ -60,6 +60,16 @@ sub set_result {
     $self->record($name)->set($type, $result);
 }
 
+sub set_invalid {
+    my ($self, $name, $type) = @_;
+    unless ($name && $type) {
+        FormValidator::Simple::Exception->throw(
+            qq/set_invalid needs two arguments./
+        );
+    }
+    $self->set_result($name, $type, FALSE);
+}
+
 sub success {
     my $self = shift;
     return ($self->has_missing or $self->has_invalid) ? FALSE : TRUE;

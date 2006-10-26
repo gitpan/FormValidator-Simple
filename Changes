@@ -1,5 +1,10 @@
 Revision history for Perl extension FormValidator::Simple.
 
+0.19  Thu Oct 26 18:52:00 2006
+    - Added set_invalid method to Results class.
+      This function is described in POD, but didn't work.
+      Applied a patche from IKEBE Tomohiro. Thanks!
+
 0.18  Tue Sep 12 18:20:00 2006
     - bugfix:
         numeric comperison, GREATER_THAN, LESS_THAN, and EQUAL_TO doesn't work
