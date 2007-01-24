@@ -12,7 +12,7 @@ use FormValidator::Simple::Validator;
 use FormValidator::Simple::Constants;
 use FormValidator::Simple::Messages;
 
-our $VERSION = '0.19';
+our $VERSION = '0.20';
 
 __PACKAGE__->mk_classaccessors(qw/data prof results/);
 __PACKAGE__->mk_classaccessor( messages => FormValidator::Simple::Messages->new );
@@ -619,6 +619,15 @@ after setting, execute check(),
 
     foreach my $message ( @$messages ) {
         print $message, "\n";
+    }
+
+    # or you can get messages as hash style.
+    # each fieldname is the key
+    my $field_messages = $result->field_messages('action1');
+    if ($field_messages->{name}) {
+        foreach my $message ( @{ $field_messages->{name} } ) {
+            print $message, "\n";
+        }
     }
 
 When it can't find indicated action, name, and type, it searches proper message from DEFAULT action.

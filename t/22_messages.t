@@ -1,5 +1,5 @@
 use strict;
-use Test::More tests => 16;
+use Test::More tests => 25;
 BEGIN{ use_ok("FormValidator::Simple") }
 use CGI;
 
@@ -83,6 +83,12 @@ my $omessages = $or->messages('object');
 is($omessages->[0], 'not blank for object1');
 is($omessages->[1], 'length wrong for object2');
 
+my $field_messages = $or->field_messages('object');
+is(scalar @{ $field_messages->{object1} }, 1);
+is(scalar @{ $field_messages->{object2} }, 1);
+is($field_messages->{object1}[0], 'not blank for object1');
+is($field_messages->{object2}[0], 'length wrong for object2');
+
 # make sure the class version still works:
 my $nr = FormValidator::Simple->check( $q => [
   data1 => [qw/NOT_BLANK INT/, [qw/LENGTH 0 3/] ],
@@ -97,4 +103,11 @@ is($nmessages->[1], 'data1 has wrong length');
 is($nmessages->[2], 'default error for data2');
 is($nmessages->[3], 'input data3');
 is($nmessages->[4], 'input data4');
+
+my $nfmessages = $nr->field_messages('test');
+is($nfmessages->{data1}[0], 'input integer for data1');
+is($nfmessages->{data1}[1], 'data1 has wrong length');
+is($nfmessages->{data2}[0], 'default error for data2');
+is($nfmessages->{data3}[0], 'input data3');
+is($nfmessages->{data4}[0], 'input data4');
 

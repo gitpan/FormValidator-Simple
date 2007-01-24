@@ -1,5 +1,9 @@
 Revision history for Perl extension FormValidator::Simple.
 
+0.20  Wed Jan 24 20:05:00 2007
+    - Added field_messages method on Results class.
+      required by Jim Spath, Thanks.
+
 0.19  Thu Oct 26 18:52:00 2006
     - Added set_invalid method to Results class.
       This function is described in POD, but didn't work.
