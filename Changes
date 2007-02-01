@@ -1,5 +1,9 @@
 Revision history for Perl extension FormValidator::Simple.
 
+0.21  Wed Feb 2 17:52:00 2007
+    - Aplied a patch and set_messages_decode_from method was implemented.
+      Thanks to Yasuhiro Horiuchi.
+
 0.20  Wed Jan 24 20:05:00 2007
     - Added field_messages method on Results class.
       required by Jim Spath, Thanks.

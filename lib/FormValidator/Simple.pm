@@ -12,7 +12,7 @@ use FormValidator::Simple::Validator;
 use FormValidator::Simple::Constants;
 use FormValidator::Simple::Messages;
 
-our $VERSION = '0.20';
+our $VERSION = '0.21';
 
 __PACKAGE__->mk_classaccessors(qw/data prof results/);
 __PACKAGE__->mk_classaccessor( messages => FormValidator::Simple::Messages->new );
@@ -63,6 +63,11 @@ sub set_messages {
     } else {
         $class->messages->load($file);
     }
+}
+
+sub set_message_decode_from {
+    my ($self, $decode_from) = @_;
+    $self->messages->decode_from($decode_from);
 }
 
 sub set_message_format {
@@ -151,7 +156,6 @@ sub check {
 }
 
 1;
-__END__
 
 =head1 NAME
 
@@ -653,6 +657,13 @@ you can set each message format.
 =head1 RESULT HANDLING
 
 See L<FormValidator::Simple::Results>
+
+=head1 FLAGGED UTF-8
+
+If you set encoding like follows, it automatically decode the
+result messages.
+
+    FormValidtor::Simple->set_mesasges_decode_from('utf-8');
 
 =head1 SEE ALSO
 

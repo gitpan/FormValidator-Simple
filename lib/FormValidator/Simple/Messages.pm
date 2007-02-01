@@ -1,7 +1,11 @@
 package FormValidator::Simple::Messages;
 use strict;
+use base 'Class::Accessor::Fast';
 use YAML;
 use FormValidator::Simple::Exception;
+
+__PACKAGE__->mk_accessors(qw/decode_from/);
+use Encode;
 
 sub new {
     my $class = shift;
@@ -45,6 +49,9 @@ sub load {
 sub get {
     my $self = shift;
     my $msg  = $self->_get(@_);
+    if ($self->decode_from && !Encode::is_utf8($msg)) {
+        $msg = Encode::decode($self->decode_from, $msg);
+    }
     return sprintf $self->format, $msg;
 }
 
