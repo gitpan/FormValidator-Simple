@@ -12,7 +12,7 @@ use FormValidator::Simple::Validator;
 use FormValidator::Simple::Constants;
 use FormValidator::Simple::Messages;
 
-our $VERSION = '0.21';
+our $VERSION = '0.22';
 
 __PACKAGE__->mk_classaccessors(qw/data prof results/);
 __PACKAGE__->mk_classaccessor( messages => FormValidator::Simple::Messages->new );
@@ -57,9 +57,13 @@ sub set_messages {
     my $class = ref $proto || $proto;
     if (blessed $proto) {
         $proto->messages(FormValidator::Simple::Messages->new)->load($file);
-        $proto->results( FormValidator::Simple::Results->new(
-            messages => $proto->messages,
-        ) );
+        if ($proto->results) {
+            $proto->results->message($proto->messages);
+        } else {
+            $proto->results( FormValidator::Simple::Results->new(
+                messages => $proto->messages,
+            ) );
+        }
     } else {
         $class->messages->load($file);
     }

@@ -1,7 +1,11 @@
 Revision history for Perl extension FormValidator::Simple.
 
+0.22  Tue Mar 6 20:07:00 2007
+    - Applied a patch that lets it work as expected in case *set_messages* is invoked after *check*.
+      Thanks to Yappo.
+
 0.21  Wed Feb 2 17:52:00 2007
-    - Aplied a patch and set_messages_decode_from method was implemented.
+    - Applied a patch and set_messages_decode_from method was implemented.
       Thanks to Yasuhiro Horiuchi.
 
 0.20  Wed Jan 24 20:05:00 2007
