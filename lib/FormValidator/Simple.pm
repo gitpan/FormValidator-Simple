@@ -12,7 +12,7 @@ use FormValidator::Simple::Validator;
 use FormValidator::Simple::Constants;
 use FormValidator::Simple::Messages;
 
-our $VERSION = '0.22';
+our $VERSION = '0.23';
 
 __PACKAGE__->mk_classaccessors(qw/data prof results/);
 __PACKAGE__->mk_classaccessor( messages => FormValidator::Simple::Messages->new );
@@ -20,7 +20,12 @@ __PACKAGE__->mk_classaccessor( messages => FormValidator::Simple::Messages->new 
 sub import {
     my $class = shift;
     foreach my $plugin (@_) {
-        my $plugin_class = "FormValidator::Simple::Plugin::".$plugin;
+        my $plugin_class;
+        if ($plugin =~ /^\+(.*)/) {
+            $plugin_class = $1;
+        } else {
+            $plugin_class = "FormValidator::Simple::Plugin::$plugin";
+        }
         $class->load_plugin($plugin_class);
     }
 }
@@ -565,6 +570,10 @@ or use 'load_plugin' method.
 
     use FormValidator::Simple;
     FormValidator::Simple->load_plugin('FormValidator::Simple::Plugin::CreditCard');
+
+If you want to load plugin which name isn't in FormValidator::Simple::Plugin namespace, use +.
+
+    use FormValidator::Simple qw/+MyApp::ValidatorPlugin/;
 
 =head1 MESSAGE HANDLING
 

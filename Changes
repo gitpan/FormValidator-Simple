@@ -1,5 +1,9 @@
 Revision history for Perl extension FormValidator::Simple.
 
+0.23  Thr Apr 17 21:17:00 2008
+    - Applied a patch which lets FVS loads plugin easily with +, like Catalyst.
+      Thanks to Jiro Nishiguchi.
+
 0.22  Tue Mar 6 20:07:00 2007
     - Applied a patch that lets it work as expected in case *set_messages* is invoked after *check*.
       Thanks to Yappo.

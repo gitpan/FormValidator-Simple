@@ -23,4 +23,4 @@ requires:
   Tie::IxHash: 1.21
   UNIVERSAL::require: 0.1
   YAML: 0.39
-version: 0.21
+version: 0.23

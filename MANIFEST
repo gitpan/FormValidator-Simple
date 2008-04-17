@@ -25,6 +25,7 @@ lib/FormValidator/Simple/Results.pm
 lib/FormValidator/Simple/Validator.pm
 Makefile.PL
 MANIFEST
+MANIFEST.SKIP
 META.yml
 README
 t/00_compile.t
@@ -59,3 +60,4 @@ t/28_decode.t
 t/conf/messages.yml
 t/conf/messages_ja.yml
 t/lib/FormValidator/Simple/Plugin/Sample.pm
+t/lib/MyNamespace/MyPlugin.pm
